@@ -73,7 +73,7 @@ const CountdownTimer = () => {
     rel="noopener noreferrer"
     className="transition-transform transform hover:scale-110 text-4xl"
   >
-    <FacebookIcon className="text-4xl" />
+    <FacebookIcon fontSize="10rem"/>
   </Link>
 
   <Link
@@ -82,7 +82,7 @@ const CountdownTimer = () => {
     rel="noopener noreferrer"
     className="transition-transform transform hover:scale-110 text-4xl"
   >
-    <InstagramIcon className="text-4xl" />
+    <InstagramIcon fontSize="10rem" />
   </Link>
 </div>
 

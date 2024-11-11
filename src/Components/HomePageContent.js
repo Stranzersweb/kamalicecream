@@ -4,7 +4,7 @@ import { ParallaxScroll } from "@/Components/ui/parallax-scroll";
 import CountdownTimer from "@/Components/countDownTimer";
 import { LampContainer } from "@/Components/ui/lamp";
 import { motion } from "framer-motion";
-k';
+
 
 // Initial set of images
 const baseImages = [
