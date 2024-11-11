@@ -4,7 +4,7 @@ import { ParallaxScroll } from "@/Components/ui/parallax-scroll";
 import CountdownTimer from "@/Components/countDownTimer";
 import { LampContainer } from "@/Components/ui/lamp";
 import { motion } from "framer-motion";
-import FacebookIcon from '@mui/icons-material/Facebook';
+k';
 
 // Initial set of images
 const baseImages = [
@@ -92,7 +92,7 @@ export default function ParallaxScrollDemo() {
     
       </motion.h1> {/* 5 minutes countdown */}
       </LampContainer>
-      <FacebookIcon/>
+      
       {/* Blurred Parallax Scroll Container */}
       <div
         ref={scrollContainerRef}
