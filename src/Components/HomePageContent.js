@@ -1,65 +1,105 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import NavBar from './Header';
+"use client";
+import React, { useRef, useState, useEffect } from "react";
+import { ParallaxScroll } from "@/Components/ui/parallax-scroll";
+import CountdownTimer from "@/Components/countDownTimer";
+import { LampContainer } from "@/Components/ui/lamp";
+import { motion } from "framer-motion";
+import FacebookIcon from '@mui/icons-material/Facebook';
 
-const HomePageContent = () => {
-  const [showEnglishText, setShowEnglishText] = useState(true);
+// Initial set of images
+const baseImages = [
+  "https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80",
+  "https://images.unsplash.com/photo-1505144808419-1957a94ca61e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3070&q=80",
+  "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3540&q=80",
+  "https://images.unsplash.com/photo-1502174832274-bc176e52765a?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1529688499411-262f191fe29e?q=80&w=2535&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1590080962330-747c6aba8028?q=80&w=2680&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1576506295286-5cda18df43e7?q=80&w=2535&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1580915411954-282cb1b0d780?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1689298465703-a1e491ede3fd?q=80&w=1857&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+];
 
-  useEffect(() => {
-    // Set up a timer to toggle between English and Hindi text every 3 seconds
-    const timer = setInterval(() => {
-      setShowEnglishText((prev) => !prev);
-    }, 7000);
+// Countdown Timer Component
+// const CountdownTimer = ({ duration }) => {
+//   const [timeLeft, setTimeLeft] = useState(duration);
 
-    // Clear the timer on component unmount
-    return () => clearInterval(timer);
-  }, []);
+//   useEffect(() => {
+//     if (timeLeft <= 0) return;
 
-  const containerStyle = {
-    position: 'relative',
-    textAlign: 'center',
-    backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1473213110592-19430a217c0e?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
-    backgroundSize: 'cover',
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    color: 'white',
-    animation: 'zoomInOut 10s infinite alternate',
+//     const timerId = setInterval(() => {
+//       setTimeLeft((prevTime) => prevTime - 1);
+//     }, 1000);
+
+//     return () => clearInterval(timerId);
+//   }, [timeLeft]);
+
+//   const formatTime = (seconds) => {
+//     const mins = Math.floor(seconds / 60);
+//     const secs = seconds % 60;
+//     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+//   };
+
+//   return (
+//     <div className="absolute top-4 right-4 bg-black bg-opacity-75 text-white text-xl px-4 py-2 rounded-lg z-20">
+//       {formatTime(timeLeft)}
+//       d
+//     </div>
+//   );
+// };
+
+export default function ParallaxScrollDemo() {
+  const [images, setImages] = useState([...baseImages, ...baseImages]); // Duplicate the initial images for looping
+  const scrollContainerRef = useRef(null);
+
+  // Function to load more images by looping
+  const loadMoreImages = (position) => {
+    if (position === "top") {
+      setImages((prevImages) => [...baseImages, ...prevImages]);
+    } else {
+      setImages((prevImages) => [...prevImages, ...baseImages]);
+    }
   };
 
-  const textContainerStyle = {
-    position: 'relative', // Ensure position is relative
-    zIndex: 1, // Set z-index to place it above the background image
-    transition: 'opacity 0.8s ease-in-out',
-    opacity: showEnglishText ? 1 : 0,
+  // Handle scroll event
+  const handleScroll = () => {
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+
+    if (scrollTop === 0) {
+      loadMoreImages("top");
+    }
+    if (scrollTop + clientHeight >= scrollHeight) {
+      loadMoreImages("bottom");
+    }
   };
+
 
   return (
-    <div style={containerStyle}>
-      <NavBar />
-      <style>
-        {`
-          @keyframes zoomInOut {
-            0% {
-              transform: scale(1);
-            }
-            100% {
-              transform: scale(1.05);
-            }
-          }
-        `}
-      </style>
-      <div style={textContainerStyle}>
-        <h1 className="text-4xl font-bold mb-4">
-          {showEnglishText ? 'Kamal Ice Cream' : 'कमल आइसक्रीम'}
-        </h1>
-        <p className="text-lg text-center font-medium">
-          {showEnglishText ? 'Serving since 1978' : '१९७८ से सेवा कर रहे हैं'}
-        </p>
+    <div className="relative h-screen z-1">
+      {/* Countdown Timer Overlay */}
+      <LampContainer>
+      <motion.h1
+        initial={{ opacity: 0.5, y: 100 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{
+          delay: 0.3,
+          duration: 0.8,
+          ease: "easeInOut",
+        }}
+        className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
+      >
+      <CountdownTimer />
+      
+    
+      </motion.h1> {/* 5 minutes countdown */}
+      </LampContainer>
+      <FacebookIcon/>
+      {/* Blurred Parallax Scroll Container */}
+      <div
+        ref={scrollContainerRef}
+        className="h-full overflow-y-scroll filter blur-sm z-10" // Apply blur effect
+      >
+        <ParallaxScroll className="h-full" images={images} />
       </div>
     </div>
   );
-};
-
-export default HomePageContent;
+}
